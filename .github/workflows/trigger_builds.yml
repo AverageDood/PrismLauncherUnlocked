@@ -20,13 +20,22 @@ on:
       - ".github/ISSUE_TEMPLATE/**"
       - ".markdownlint**"
   workflow_dispatch:
-
+    inputs:
+        build_type:
+          description: 'Build type'
+          required: true
+          type: choice
+          options:
+          - Release
+          - Debug
+          - RelWithDebInfo
+          - MinSizeRel
 jobs:
   build_debug:
     name: Build Debug
     uses: ./.github/workflows/build.yml
     with:
-      build_type: Debug
+      build_type: ${{ inputs.build_type || 'Release' }}
       is_qt_cached: true
     secrets:
       SPARKLE_ED25519_KEY: ${{ secrets.SPARKLE_ED25519_KEY }}
